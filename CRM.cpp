@@ -5,7 +5,7 @@
 int main() {
     std::string input;
     bool keepRunning = true;
-
+    
     while (keepRunning) {
         std::cout << "Enter text to be written in the CRM and copied to another application (Enter 'q' to quit): ";
         std::getline(std::cin, input);
@@ -39,9 +39,19 @@ int main() {
             GlobalUnlock(hglbCopy);
             SetClipboardData(CF_UNICODETEXT, hglbCopy);
             CloseClipboard();
-        }
-        else {
+        } else {
             std::cout << "Failed to open clipboard" << std::endl;
+        }
+
+        // Send the text to another application
+        // Assume the other application is open and active
+        // Replace "Other_Application" with the actual name of the other application
+        HWND other = FindWindow(NULL, "Other_Application");
+        if (other != NULL) {
+            // Send the text to the other application's input field
+            SendMessage(other, WM_SETTEXT, 0, (LPARAM)input.c_str());
+        } else {
+            std::cout << "Other application not found." << std::endl;
         }
     }
 
